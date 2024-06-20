@@ -1,5 +1,5 @@
-import { Container, Text, VStack, Box, Heading, Image, SimpleGrid, LinkBox, LinkOverlay, Button } from "@chakra-ui/react";
-import { FaHeart } from "react-icons/fa";
+import { Container, Text, VStack, Box, Heading, Image, SimpleGrid, LinkBox, LinkOverlay, Button, HStack } from "@chakra-ui/react";
+import { FaHeart, FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
@@ -10,6 +10,17 @@ const Index = () => {
     const storedRecipes = JSON.parse(localStorage.getItem("recipes")) || [];
     setRecipes(storedRecipes);
   }, []);
+
+  const handleRating = (id, rating) => {
+    const updatedRecipes = recipes.map((recipe) => {
+      if (recipe.id === id) {
+        return { ...recipe, rating };
+      }
+      return recipe;
+    });
+    setRecipes(updatedRecipes);
+    localStorage.setItem("recipes", JSON.stringify(updatedRecipes));
+  };
 
   return (
     <Container maxW="container.xl" py={10}>
@@ -37,6 +48,16 @@ const Index = () => {
                 <Text mt="2" color="gray.500">
                   {recipe.description}
                 </Text>
+                <HStack mt="2">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <FaStar
+                      key={star}
+                      color={recipe.rating >= star ? "gold" : "gray"}
+                      onClick={() => handleRating(recipe.id, star)}
+                      cursor="pointer"
+                    />
+                  ))}
+                </HStack>
               </Box>
             </LinkBox>
           ))}
