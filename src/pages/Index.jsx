@@ -1,28 +1,16 @@
-import { Container, Text, VStack, Box, Heading, Image, SimpleGrid, LinkBox, LinkOverlay } from "@chakra-ui/react";
+import { Container, Text, VStack, Box, Heading, Image, SimpleGrid, LinkBox, LinkOverlay, Button } from "@chakra-ui/react";
 import { FaHeart } from "react-icons/fa";
-
-const recipes = [
-  {
-    id: 1,
-    title: "Spaghetti Carbonara",
-    image: "https://via.placeholder.com/150",
-    description: "A classic Italian pasta dish made with eggs, cheese, pancetta, and pepper.",
-  },
-  {
-    id: 2,
-    title: "Chicken Tikka Masala",
-    image: "https://via.placeholder.com/150",
-    description: "Chunks of roasted marinated chicken in a spiced curry sauce.",
-  },
-  {
-    id: 3,
-    title: "Beef Stroganoff",
-    image: "https://via.placeholder.com/150",
-    description: "A Russian dish of sautéed pieces of beef served in a sauce with smetana (sour cream).",
-  },
-];
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const Index = () => {
+  const [recipes, setRecipes] = useState([]);
+
+  useEffect(() => {
+    const storedRecipes = JSON.parse(localStorage.getItem("recipes")) || [];
+    setRecipes(storedRecipes);
+  }, []);
+
   return (
     <Container maxW="container.xl" py={10}>
       <VStack spacing={8}>
@@ -32,6 +20,9 @@ const Index = () => {
         <Text fontSize="xl" textAlign="center">
           Discover and share your favorite recipes with the world!
         </Text>
+        <Button as={Link} to="/submit-recipe" colorScheme="teal" size="lg">
+          Submit a Recipe
+        </Button>
         <SimpleGrid columns={[1, 2, 3]} spacing={10}>
           {recipes.map((recipe) => (
             <LinkBox as="article" key={recipe.id} p="5" borderWidth="1px" rounded="md">
